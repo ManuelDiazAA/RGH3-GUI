@@ -28,12 +28,12 @@ class ComponentBin:
         )
 
     def binTextBox( self ):
-        binTextBox = Entry(
+        self.binTextBox = Entry(
             self.mainSelf.main,
             textvariable = self.binText
         )
 
-        binTextBox.grid(
+        self.binTextBox.grid(
             row = 0,
             column = 1,
             padx=10,

@@ -68,6 +68,7 @@ def help():
 
 def main():
     if len(sys.argv) < 3:
+        print('error arguments')
         help()
         return
 

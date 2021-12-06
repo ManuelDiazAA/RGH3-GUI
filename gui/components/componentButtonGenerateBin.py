@@ -33,4 +33,4 @@ class ComponentButtonGenerateBin:
             }
         )
 
-        rgh3ScripObject.startCoverse()
+        rgh3ScripObject.startConverse()

@@ -31,17 +31,22 @@ class ComponentMotherBoard:
         pass
 
     def motherBoardListBox( self ):
-        self.motherBoardText = StringVar(self.mainSelf.main)
-        choices = { 
+        choices = [ 
             (1, 'Corona'),
-            (2, 'Falcon'),
-            (3, 'Jasper'),
-            (4, 'Trinity',)
-            }
-        self.motherBoardText.set('Corona') # set the default option
+            (2, 'Corona 4GB'),
+            (3, 'Falcon 10MHZ'),
+            (4, 'Falcon 27MHZ'),
+            (5, 'Jasper 10mhz'),
+            (6, 'Jasper 27mhz'),
+            (7, 'Jasper64 10mhz'),
+            (8, 'Jasper64 27mhz'),
+            (9, 'Trinity',)
+        ]
+        self.motherBoardText.set((1, 'Corona')) # set the default option
 
         self.popupMenu = OptionMenu(
             self.mainSelf.main,
             self.motherBoardText,
-            *choices)
+            *choices,
+            )
         self.popupMenu.grid(row = 2, column =1)
