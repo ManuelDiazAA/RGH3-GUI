@@ -1,5 +1,3 @@
-import subprocess
-import sys
 import os 
 from gui.controllers.rgh3Script.twotothree import TwoToThree
 
@@ -24,28 +22,28 @@ class Rgh3ScriptController:
     def startConverse( self ):
 
         if self.motherboard == 'Corona':
-            motherboard_path = '/rgh3Script/motherBoards/Corona/RGH3_Corona.bin'
+            motherboard_path = '/motherBoards/Corona/RGH3_Corona.bin'
         if self.motherboard == 'Corona 4GB':
-            motherboard_path = '/rgh3Script/motherBoards/Corona/RGH3_Corona_4G.bin'
+            motherboard_path = '/motherBoards/Corona/RGH3_Corona_4G.bin'
         if self.motherboard == 'Falcon 10MHZ':
-            motherboard_path = '/rgh3Script/motherBoards/Falcon/RGH3_Falcon_10mhz.bin'
+            motherboard_path = '/motherBoards/Falcon/RGH3_Falcon_10mhz.bin'
         if self.motherboard == 'Falcon 27MHZ':
-            motherboard_path = '/rgh3Script/motherBoards/Falcon/RGH3_Falcon_27mhz.bin'
+            motherboard_path = '/motherBoards/Falcon/RGH3_Falcon_27mhz.bin'
         if self.motherboard == 'Jasper 10mhz':
-            motherboard_path = '/rgh3Script/motherBoards/Jasper/RGH3_Jasper_10mhz.bin'
+            motherboard_path = '/motherBoards/Jasper/RGH3_Jasper_10mhz.bin'
         if self.motherboard == 'Jasper 27mhz':
-            motherboard_path = '/rgh3Script/motherBoards/Jasper/RGH3_Jasper_27mhz.bin'
+            motherboard_path = '/motherBoards/Jasper/RGH3_Jasper_27mhz.bin'
         if self.motherboard == 'Jasper64 10mhz':
-            motherboard_path = '/rgh3Script/motherBoards/Jasper/RGH3_Jasper64_10mhz.bin'
+            motherboard_path = '/motherBoards/Jasper/RGH3_Jasper64_10mhz.bin'
         if self.motherboard == 'Jasper64 27mhz':
-            motherboard_path = '/rgh3Script/motherBoards/Jasper/RGH3_Jasper64_27mhz.bin'
+            motherboard_path = '/motherBoards/Jasper/RGH3_Jasper64_27mhz.bin'
         if self.motherboard == 'Trinity':
-            motherboard_path = '/rgh3Script/motherBoards/Trinity/RGH3_Trinity.bin'
+            motherboard_path = '/motherBoards/Trinity/RGH3_Trinity.bin'
 
-        ecc_path = os.path.dirname(os.path.realpath(__file__)) + motherboard_path
-        print(ecc_path)
+        ecc_path = os.getcwd() + motherboard_path
+        
         if not os.path.isfile( ecc_path ):
-            raise Exception('Archivo ECC Motherboard no encontrado')
+            raise Exception('Archivo ECC Motherboard no encontrado' + ecc_path)
 
         convert_process = TwoToThree(
             config={

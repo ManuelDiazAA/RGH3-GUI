@@ -1,4 +1,3 @@
-import sys
 import struct
 from gui.controllers.rgh3Script import ecc_utils
 import hmac
@@ -81,7 +80,7 @@ class TwoToThree:
         with open( self.updflash, "rb" ) as f:
             fb = f.read()
         fb_with_ecc = False
-
+        print(len(fb))
         if len(fb) == 17301504 or len(fb) == 69206016:
             print("FB image contains spare data")
             xell_start = 0x73800
@@ -97,10 +96,10 @@ class TwoToThree:
 
         if fb_with_ecc:
             spare_sample = fb[0x4400:0x4410]
-            if spare_sample[0] == b"\xff":
+            if spare_sample[0].to_bytes(1, 'big') == b"\xff":
                 print("Detected 256/512MB Big Block Flash")
                 block_type=ecc_utils.BLOCK_TYPE_BIG
-            elif spare_sample[5] == b"\xff":
+            elif spare_sample[5].to_bytes(1, 'big') == b"\xff":
                 if spare_sample[0:2] == b"\x01\x00":
                     print("Detected 16/64MB Small Block Flash")
                     block_type=ecc_utils.BLOCK_TYPE_SMALL
@@ -155,6 +154,7 @@ class TwoToThree:
         if fb_with_ecc:
             patchable_fb = ecc_utils.addecc(patchable_fb, block_type=block_type)
         fb = patchable_fb + fb[len(patchable_fb):]
-        with open('public/output/output.bin', "wb") as f:
+        output_path = os.getcwd() + '\\public\\output\\nand.bin'
+        with open(output_path, "wb") as f:
             f.write(fb)
         print("\nDone!")

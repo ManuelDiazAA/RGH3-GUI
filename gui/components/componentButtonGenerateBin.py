@@ -51,7 +51,7 @@ class ComponentButtonGenerateBin:
 
             rgh3ScripObject.startConverse()
 
-            messagebox.showinfo(title='Success', message='Done!')
+            messagebox.showinfo(title='Success', message='Done! search nand.bin in public/output')
         
         except Exception as e:
             messagebox.showerror(title='Error', message=e)
