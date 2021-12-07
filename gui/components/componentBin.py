@@ -17,7 +17,7 @@ class ComponentBin:
     def binLabel( self ):
         binLabel = Label(
             self.mainSelf.main,
-            text = '.BIN: ',
+            text = 'Nand .BIN: ',
             )
         binLabel.grid(
             row = 0,

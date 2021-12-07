@@ -40,15 +40,12 @@ class TwoToThree:
     
     def start_encrypt ( self ):
         if not os.path.isfile( self.rgh3_ecc ):
-            print('ecc file not found')
-            return None
+            raise Exception('ecc file not found')
         if not os.path.isfile( self.updflash ):
-            print('nand.bin not found')
-            return None
+            raise Exception('nand.bin not found')
         cpukey = bytearray.fromhex( self.cpu_key )
         if len(cpukey) != 16:
-            print("Unexpected CPU key length. Aborting")
-            return None
+            raise Exception('Unexpected CPU key length. Aborting')
 
         print("Loading ECC")
         with open(self.rgh3_ecc, "rb") as f:
@@ -60,8 +57,7 @@ class TwoToThree:
         elif len(ecc) == 1310720:
             print("ECC does not contain spare data")
         else:
-            print("Unexpected ECC length. Aborting")
-            return None
+            raise Exception('Unexpected ECC length. Aborting')
 
         print("\nExtracting RGH3 SMC")
         (rgh3_smc_len, rgh3_smc_start) = struct.unpack(">LL", ecc[0x78:0x80])
@@ -79,8 +75,7 @@ class TwoToThree:
         rgh3_payload = ecc[loader_start:loader_start+loader_size]
 
         if not rgh3_payload or not rgh3_cba:
-            print("\nMissing ECC bootloaders. Aborting")
-            return None
+            raise Exception('Missing ECC bootloaders. Aborting')
 
         print("\nLoading FB")
         with open( self.updflash, "rb" ) as f:
@@ -98,8 +93,7 @@ class TwoToThree:
             xell_start = 0x70000
             patchable_fb = fb[:xell_start]
         else:
-            print("Unexpected FB image length. Aborting")
-            return None
+            raise Exception('Unexpected FB image length. Aborting')
 
         if fb_with_ecc:
             spare_sample = fb[0x4400:0x4410]
@@ -114,18 +108,14 @@ class TwoToThree:
                     print("Detected 16/64MB Big on Small Flash")
                     block_type=ecc_utils.BLOCK_TYPE_BIG_ON_SMALL
                 else:
-                    print("Can't detect Flash type. Aborting")
-                    return None
+                    raise Exception("Can't detect Flash type. Aborting")
             else:
-                print("Can't detect Flash type. Aborting")
-                return None
+                raise Exception("Can't detect Flash type. Aborting")
         else:
             print("Detected 4GB Flash")
 
         if fb[xell_start:xell_start + 0x10] != b"\x48\x00\x00\x20\x48\x00\x00\xEC\x48\x00\x00\x00\x48\x00\x00\x00":
-            print("Xell header not found. Aborting")
-            print()
-            return None
+            raise Exception("Xell header not found. Aborting")
 
         print("\nPatching SMC")
         patchable_fb = patchable_fb[:rgh3_smc_start] + rgh3_smc + patchable_fb[rgh3_smc_start+rgh3_smc_len:]
@@ -151,8 +141,7 @@ class TwoToThree:
         plain_fb_cba = self.decrypt_CB(fb_cba, key_1bl)
         fb_cbb = self.decrypt_CB_B(fb_cbb, plain_fb_cba, cpukey)
         if fb_cbb[0x392:0x39a] not in [b"\x58\x42\x4F\x58\x5F\x52\x4F\x4D", b"\x00" * 8]:
-            print("CB_B decryption error (wrong CPU key?). Aborting")
-            return None
+            raise Exception('CB_B decryption error (wrong CPU key?). Aborting')
 
         print("\nPatching CB")
         original_size = len(patchable_fb)
